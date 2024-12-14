@@ -10,4 +10,4 @@
 ### 5.User Interface: Creating a user-friendly interface that allows users to browse, search, and filter news articles. The interface can be styled using HTML, CSS, and JavaScript.
 
 ### 6.Authentication: Implementing user authentication to allow users to log in and personalize their news feed.
-# A Django-based news aggregator might scrape articles from a site like The Onion, store the articles in a database, and display them on a web page with options to read full articles, view images, and filter news by category
+## A Django-based news aggregator might scrape articles from a site like The Onion, store the articles in a database, and display them on a web page with options to read full articles, view images, and filter news by category
