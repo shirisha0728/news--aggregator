@@ -1,0 +1,259 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1,shrink-to-fit=no" />
+  <title>news website</title>
+  
+  <!-- Bootsratp CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css">
+
+ 
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+
+</head>
+
+<body>
+    <style>
+        .dark-mode {
+        background-color: black;
+        color: white;
+      }
+    </style>
+  <!-- This is Bootsratp Nav bar -->
+  <nav id="navbar">
+    <nav class="navbar navbar-dark navbar-expand-lg bg-dark">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="#">GET news</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent" aria-expanded="false"   aria-haspopup="true" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" onclick="getNews('all')">Home</a>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
+                aria-expanded="false">
+                Category
+              </a>
+              <ul id="webList" class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li onclick="sendCategory(this.id)" id="0">
+                  <a class="dropdown-item" href="{% url 'scrape' name='national' %}">National</a>
+                </li>
+                <li onclick="sendCategory(this.id)" id="1">
+                  <a class="dropdown-item" href="{% url 'scrape' name='business' %}">Business</a>
+                </li>
+                <li onclick="sendCategory(this.id)" id="2">
+                  <a class="dropdown-item" href="{% url 'scrape' name='sports' %}">Sport</a>
+                </li>
+                <li onclick="sendCategory(this.id)" id="3">
+                    <a class="dropdown-item" href="{% url 'scrape' name='breaking-news' %}"
+                    >breaking-news</a>
+                </li>
+                <li onclick="sendCategory(this.id)" id="4">
+                    <a class="dropdown-item" href="{% url 'scrape' name='politics' %}"
+                    >Politics</a>
+                </li>
+                
+                <li onclick="sendCategory(this.id)" id="5">
+                    <a class="dropdown-item" href="{% url 'scrape' name='latest' %}"
+                    >Latest</a>
+                </li>
+                <li onclick="sendCategory(this.id)" id="6">
+                    <a
+                    class="dropdown-item"
+                    href="{% url 'scrape' name='entertainment' %}"
+                    >Entertainment</a>
+                                </li>
+                
+               
+              </ul>
+            </li>
+          </ul>
+          <button
+          class="btn btn-warning btn-lg btn-block m-4 p-2"
+          onclick="themeChange()">
+          Change Theme
+        </button>
+             
+      </div>
+    </nav>
+  </nav>
+  <!-- This is basic header of website -->
+  <div class="head container">
+    <h3>
+      Top News <span class="badge text-bg-secondary">By BBC</span>
+    </h3>
+    <span class="line"></span>
+  </div>
+  <nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        
+      </div>
+    </div>
+  </nav>
+
+  {% block content %}
+  {% endblock content %}
+
+  
+  <!-- This is div where all the News are Fetched from API -->
+ 
+  <div class="row mt-2 p-2">
+    <!-- 
+      Django Template Language
+      DTL help us to create conditional statements or logical loops inside template 
+    -->
+    {% for record in object_list %}
+    <!-- the following code will be repeated based on how many values are available in object_list -->
+    <div class="col-12 col-md-4 col-lg-3">
+      <div class="card mb-4">
+        <img class="card-img-top" src="{{ record.image }}" />
+        <div class="card-body">
+          <h5 class="card-title">
+            <a href="{{ record.url }}"
+              >{{ record.title|truncatechars:50 }}</a
+            >
+          </h5>
+        </div>
+        <div class="card-footer">
+          <div class="d-flex justify-content-between flex-wrap">
+            <div class="mb-2">
+              <!-- Copy Button -->
+              <button 
+                class="btn btn-secondary btn-sm btn-block"
+                onclick="copyToClipboard('{{ record.url }}')"
+              >
+                Copy
+              </button>
+            </div>
+
+            <div class="mb-2">
+              <!-- Report Button -->
+              <button
+                class="btn btn-danger btn-sm btn-block"
+                onclick=" "
+              >
+                Report
+              </button>
+            </div>
+
+            <div class="mb-2">
+              <!-- Facebook Button -->
+              <button class="btn btn-info">
+               
+                <a href="https://www.facebook.com/sharer/sharer.php?u={{ currenturl }}"><i class="fa fa-facebook"></i></a>
+              </button>
+            </div>
+
+            <div class="mb-2">
+              <!-- Whatsapp Button -->
+              <button class="btn btn-info">
+                
+                <a href="https://api.whatsapp.com/send?text={{ currenturl }}"><i class="fa fa-whatsapp"></i></a>
+              </button>
+            </div>
+
+            <div class="mb-2">
+              <!-- twitter Button -->
+              <button class="btn btn-info">
+
+                <a href="https://api.twitter.com/send?text={{ currenturl }}"><i class="fa fa-twitter"></i></a>
+
+              </button>
+            </div>
+          </div>
+        </div>
+  </div>
+</div>   
+{% endfor %} 
+    </div> 
+  </div>
+
+<script>
+  // add a temporary textarea element, set url to it, select from there
+  function copyToClipboard(text) 
+  {
+    
+    var input = document.createElement("textarea");//create text area
+    input.value = text;//url set as value to textarea
+    document.body.appendChild(input);//add text area to body
+    input.select();//select textarea content
+    document.execCommand("copy");
+    document.body.removeChild(input);
+    alert("Copied to clipboard: " + text);
+  }
+  </script>
+
+
+<script>
+  function themeChange() {
+    var element = document.body;
+    element.classList.toggle("dark-mode");
+  }
+</script>
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+  
+  
+
+  <!-- This is Basic Dark Fotter -->
+  <footer id="sticky-footer" class="flex-shrink-0 py-2 bg-dark text-white-50">
+    <div class="container text-center">
+        <footer  class="footer-container">
+            <div class="row">
+                <div class="col-md-3">
+                    <h1>Legal</h1>
+                    <p>Read our terms of service and privacy policy...</p>
+                </div>
+                <div class="col-md-4">
+                    <h1>Connect with us:</h1>
+                    <ul>
+                      <li><a href= "https://www.facebook.com/sharer/sharer.php?u={{ currenturl }}"><i class = "fab fa-facebook">Facebook</i></a></li>
+                      <li><a href= "https://api.instagram.com/send?text={{ currenturl }}"><i class = "fab fa-instagram">Instagram</i></a></li>
+                      <li><a href= "https://api.twitter.com/send?text={{ currenturl }}"><i class = "fab fa-twitter">Twitter</i></a></li>
+                      
+                       
+                    </ul>
+                </div>
+                <div class="col-md-5">
+                    <h1>Contact</h1>
+                    <p>INDIA</p>
+                    <p>Email: getNews@gmail.com</p>
+                    <p>Phone: +01 234 567 88 / +01 234 567 89</p>
+                </div>
+            </div>
+            <p class="footer-item">About</p>
+            <p class="footer-item">Terms</p>
+            <p class="footer-item">Privacy</p>
+      <small>Copyright &copy;2024 &nbsp; GET news</small>
+    </div>
+  </footer>
+
+  <!-- Bootsratp js -->
+  <script src="{% static 'css/app.js' %}"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.5/dist/umd/popper.min.js"
+    integrity="sha384-Xe+8cL9oJa6tN/veChSP7q+mnSPaj5Bcu9mPX5F5xIGE0DVittaqT5lorf0EI7Vk"
+    crossorigin="anonymous"></script>
+</body>
+
+</html>
